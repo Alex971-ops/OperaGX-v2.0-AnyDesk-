@@ -1,0 +1,24 @@
+name: RustDesk - ID Fix
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 360
+    steps:
+      - name: Download RustDesk
+        run: |
+          Invoke-WebRequest -Uri https://github.com/rustdesk/rustdesk/releases/download/1.2.3/rustdesk-1.2.3-x86_64.exe -OutFile rustdesk.exe
+          .\rustdesk.exe --install-service
+      - name: Set Password
+        run: |
+          .\rustdesk.exe --password Alex971
+          net user runneradmin Alex971
+          Start-Process .\rustdesk.exe
+          Start-Sleep -Seconds 15
+      - name: Keep Alive
+        run: |
+          while($true) {
+            Write-Host "PAROLA: Alex971"
+            Get-Date
+            Start-Sleep -Seconds 300
+          }
